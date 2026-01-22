@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Women's Jewelry Shop</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Font for elegant branding -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Floating Cart Icon -->
+  <a href="cart.html" class="floating-cart" title="View Cart">
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000" viewBox="0 0 24 24">
+      <path d="M7 18c-1.104 0-1.99.895-1.99 2S5.896 22 7 22s2-.896 2-2-.896-2-2-2zm10 
+      0c-1.104 0-1.99.895-1.99 2S15.896 22 17 22s2-.896 2-2-.896-2-2-2zM7.334 
+      14.76l.02.004 10.17-.01c.84 0 1.562-.522 1.85-1.3l2.603-6.84A1 1 0 
+      0021 5H6.21L5.27 2.58A1 1 0 004.35 2H2v2h1.34l3.6 
+      9.59c.173.46.58.81 1.064.91z"/>
+    </svg>
+  </a>
+
+  <main>
+    <header class="top-transparent-header">
+  <h1 class="top-brand-name">A  T  H  E  N  A</h1>
+</header>
+    <!-- HERO / HOMEPAGE SECTION -->
+    <section class="fullscreen-hero">
+      <div class="hero-overlay">
+        <h2>Jewelry Fit for Goddess</h2>
+        <p>Elegant. Timeless. Handcrafted Jewelry.</p>
+        <button onclick="location.href='shop.html'">Shop Now</button>
+      </div>
+    </section>
+
+    <!-- PROMISE SECTION -->
+    <section class="homepage-extra">
+      <h2>Our Promise</h2>
+      <p>Elegant, Timeless, Handcrafted Jewelry</p>
+    </section>
+
+    <!-- PRODUCT GRID, INITIALLY HIDDEN -->
+    <section id="shop-section" class="hidden">
+      <div id="product-container" class="product-grid"></div>
+    </section>
+  </main>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <img id="modal-image" src="" alt="Product">
+      <h2 id="modal-name"></h2>
+      <p id="modal-price"></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="background: #eed6f7; padding: 20px; text-align: center; font-family: cursive;">
+    <p>Contact us at <a href="mailto:athena@example.com">athena@example.com</a></p>
+    <p>Follow us:
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Pinterest</a>
+    </p>
+    <p>&copy; 2025 Athena Jewelry</p>
+    
+  <p style="font-size:12px; opacity:0.6;">
+    Demo project. Product images are property of Swarovski and used for educational purposes only.
+  </p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic Page Setup -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Shopping Bag</title>
+
+  <!-- ========== CSS STYLES ========== -->
+  <style>
+    /* General Page Styling */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f6f1;
+    }
+
+    /* Header Bar */
+    header {
+      background-color: #663399;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    /* Main Layout Container */
+    .container {
+      display: flex;
+      gap: 30px;
+      padding: 40px;
+    }
+
+    /* ===== Left: Cart Items Section ===== */
+    .cart-items {
+      flex: 2;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    /* Individual Cart Item Styling */
+    .item {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 20px;
+    }
+
+    .item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-info h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .item-info p {
+      color: #666;
+      margin: 5px 0;
+    }
+
+    /* Quantity Buttons */
+    .quantity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity button {
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: red;
+      cursor: pointer;
+    }
+
+    /* ===== Right: Summary Panel ===== */
+    .summary {
+      flex: 1;
+      background: #ceb6e6;
+      padding: 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      height: fit-content;
+    }
+
+    .summary h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .summary p {
+      margin: 10px 0;
+    }
+
+    .summary input {
+      width: 100%;
+      padding: 8px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .summary button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .summary button:hover {
+      background-color: #333;
+    }
+
+    /* ===== Promo Overlay and Animation ===== */
+    #promo-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(249, 246, 241, 0.95);
+      z-index: 9999;
+      display: block;
+      overflow: hidden;
+      animation: fadeOut 2s forwards;
+    }
+
+    #promo-overlay.hidden {
+      display: none;
+    }
+
+    .promo-message {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: bold;
+      color: #8e24aa;
+      text-align: center;
+      font-family: 'cursive';
+      z-index: 10000;
+    }
+
+    .confetti {
+      width: 10px;
+      height: 10px;
+      background-color: #e91e63;
+      position: absolute;
+      animation: fall 2s linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ======= HEADER ======= -->
+  <header>Your Shopping Bag</header>
+
+  <!-- ======= MAIN CART LAYOUT ======= -->
+  <div class="container">
+    
+    <!-- LEFT SIDE: Cart Items -->
+    <div class="cart-items" id="cartItems"></div>
+    
+    <!-- RIGHT SIDE: Summary -->
+    <div class="summary">
+      <h2>Order Summary</h2>
+      <p>Subtotal: ₹<span id="subtotal">0</span></p>
+      <p>Shipping: Free</p>
+      <p><strong>Total: ₹<span id="total">0</span></strong></p>
+
+      <!-- Promo Code Box -->
+      <input type="text" id="promoCode" placeholder="Enter promo code">
+      <button onclick="applyPromo()">Apply</button>
+      <br><br>
+      <!--helloo-->
+      <button onclick="placeOrder()">Checkout</button>    </div>
+  </div>
+
+  <!-- ======= CART FUNCTIONALITY SCRIPT ======= -->
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let promoApplied = false;
+
+    function renderCart() {
+      const cartItems = document.getElementById('cartItems');
+      cartItems.innerHTML = '';
+      let subtotal = 0;
+
+      cart.forEach((item, index) => {
+        const quantity = item.quantity || 1;
+        const itemPrice = parseInt(item.price.toString().replace(/[^\d]/g, ''));
+        const itemTotal = itemPrice * quantity;
+        subtotal += itemTotal;
+
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <img src="${item.image1}" alt="${item.name}">
+          <div class="item-info">
+            <h3>${item.name}</h3>
+            <p>${item.price} × ${quantity}</p>
+            <div class="quantity">
+              <button onclick="changeQty(${index}, -1)">−</button>
+              <span>${quantity}</span>
+              <button onclick="changeQty(${index}, 1)">+</button>
+            </div>
+          </div>
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        `;
+        cartItems.appendChild(div);
+      });
+
+      updateTotals(subtotal);
+    }
+
+    function changeQty(index, delta) {
+      cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + delta);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function updateTotals(subtotal) {
+      let total = promoApplied ? subtotal * 0.5 : subtotal;
+      document.getElementById('subtotal').textContent = subtotal.toLocaleString('en-IN');
+      document.getElementById('total').textContent = total.toLocaleString('en-IN');
+    }
+
+    function applyPromo() {
+      const code = document.getElementById("promoCode").value.trim();
+      if (code === "YEN08") {
+        promoApplied = true;
+        localStorage.setItem("promoCode", "YEN08");
+        showPromoEffect(); // show celebration
+        renderCart();
+      } else {
+        alert("Invalid promo code.");
+      }
+    }
+
+    function checkout() {
+      window.location.href = 'login.html'; // redirect to login
+    }
+
+    renderCart();
+
+    function showPromoEffect() {
+      const overlay = document.getElementById("promo-overlay");
+      const container = overlay.querySelector(".confetti-container");
+      container.innerHTML = "";
+
+      overlay.classList.remove("hidden");
+
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        confetti.style.animationDuration = 2 + Math.random() * 2 + "s";
+        container.appendChild(confetti);
+      }
+
+      setTimeout(() => {
+        overlay.classList.add("hidden");
+      }, 5000);
+    }
+  </script>
+
+  <!-- ======= FOOTER ======= -->
+  <footer style="background: #eed6f7; padding: 20px; text-align: center; font-family: cursive;">
+    <p>Contact us at <a href="mailto:athena@example.com">athena@example.com</a></p>
+    <p>Follow us:
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Pinterest</a>
+    </p>
+    <p>&copy; 2025 Athena Jewelry</p>
+  </footer>
+
+  <!-- ======= TOAST NOTIFICATION (currently unused but kept for possible messages) ======= -->
+  <div id="toast" style="
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  "></div>
+
+  <!-- ======= PROMO OVERLAY with CONFETTI ======= -->
+  <div id="promo-overlay" class="hidden">
+    <div class="promo-message">🎉 Promo code applied: 50% OFF! 🎉</div>
+    <div class="confetti-container"></div>
+  </div>
+<!---heloo-->
+  <script>
+  function placeOrder() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    if (cart.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
+    const newOrder = {
+      id: "ORD" + Date.now(),
+      date: new Date().toLocaleString(),
+      status: "Order Placed",
+      items: cart
+    };
+
+    const existingOrders = JSON.parse(localStorage.getItem("orders")) || [];
+    existingOrders.push(newOrder);
+    localStorage.setItem("orders", JSON.stringify(existingOrders));
+
+    localStorage.removeItem("cart");
+
+    alert("Order placed successfully!");
+    window.location.href = "tracking.html";
+  }
+</script>
+
+</body>
+</html>

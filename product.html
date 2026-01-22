@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags for encoding and responsiveness -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Page Title -->
+  <title>Jewelry Products</title>
+
+  <!-- External Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Header Section (optional brand title) -->
+  <header>
+    <h1>Jewelry</h1>
+  </header>
+
+  <!-- Product Grid Section: All product cards will be dynamically added here -->
+  <div class="product-grid" id="product-container"></div>
+
+  <!-- Product Modal: Displays full preview when a product is clicked -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+      <!-- Close button -->
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <!-- Product image preview -->
+      <img id="modal-img" src="" alt="">
+      <!-- Product name -->
+      <h2 id="modal-name"></h2>
+      <!-- Product price -->
+      <p id="modal-price"></p>
+    </div>
+  </div>
+
+  <!-- Toast Notification (currently unused, but ready for add-to-cart feedback) -->
+  <div id="toast">Added to cart!</div>
+
+  <!-- Script that loads product data -->
+  <script src="products.js"></script>
+
+  <!-- Main Script for displaying products and handling modal -->
+  <script>
+    // Get container where products will be inserted
+    const container = document.getElementById("product-container");
+
+    // Loop through each product and create a card
+    products.forEach(product => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+
+      // Product card HTML with hover image effect and modal trigger
+      card.innerHTML = `
+        <div class="image-wrapper" onclick="showModal('${product.image1}', '${product.name}', ${product.price})">
+          <img src="${product.image1}" class="main-img" alt="${product.name}">
+          <img src="${product.image2}" class="hover-img" alt="${product.name}">
+        </div>
+        <h3>${product.name}</h3>
+        <p>₹${product.price.toLocaleString("en-IN")}</p>
+      `;
+
+      // Add card to the product grid
+      container.appendChild(card);
+    });
+
+    // Function to show the modal with selected product info
+    function showModal(image, name, price) {
+      document.getElementById('modal-img').src = image;
+      document.getElementById('modal-name').textContent = name;
+      document.getElementById('modal-price').textContent = `₹${price.toLocaleString("en-IN")}`;
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    // Function to close the modal
+    function closeModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+  </script>
+
+  <!-- Footer Section with contact and social links -->
+  <footer style="background: #eee; padding: 20px; text-align: center; font-family: cursive;">
+    <p>Contact us at <a href="mailto:athena@example.com">athena@example.com</a></p>
+    <p>Follow us:
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Pinterest</a>
+    </p>
+    <p>&copy; 2025 Athena Jewelry</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags for responsiveness and character encoding -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <!-- Page title -->
+  <title>Checkout - Athena</title>
+
+  <!-- External stylesheet and Google Font -->
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Inline styling for checkout page -->
+  <style>
+    body {
+      background-color: #f8f1fa;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 56px;
+      text-align: center;
+      margin-bottom: 10px;
+      letter-spacing: 8px;
+      color: #3d2b56;
+    }
+    h2 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 30px;
+      color: #555;
+      font-family: cursive;
+    }
+    .checkout-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    }
+    .form-section, .summary-section {
+      flex: 1 1 45%;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      background: #fafafa;
+    }
+    textarea {
+      height: 100px;
+    }
+    .payment-box {
+      margin-top: 15px;
+      background: #f4edfa;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .payment-box input[type="radio"] {
+      margin-right: 10px;
+    }
+    .summary-box {
+      background-color: #f3e8fc;
+      padding: 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    .summary-box h3 {
+      font-size: 22px;
+      margin-bottom: 15px;
+      color: #4b006e;
+    }
+    .summary-box p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+    .place-order-btn {
+      background-color: #aa00ff;
+      color: white;
+      padding: 14px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 25px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .place-order-btn:hover {
+      background-color: #8800cc;
+    }
+    #order-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px 30px;
+      font-size: 22px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 9999;
+    }
+    #order-message.show {
+      opacity: 1;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="brand-name">A T H E N A</h1>
+  <h2>Secure Checkout</h2>
+
+  <div class="checkout-container">
+    <div class="form-section">
+      <form id="shipping-form">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" required>
+
+        <label for="mobile">Mobile Number</label>
+        <input type="tel" id="mobile" required>
+
+        <label for="email">Email (optional)</label>
+        <input type="email" id="email">
+
+        <label for="street">Street Address</label>
+        <input type="text" id="street" required>
+
+        <label for="city">City</label>
+        <input type="text" id="city" required>
+
+        <label for="state">State</label>
+        <input type="text" id="state" required>
+
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" required>
+
+        <label for="notes">Delivery Instructions (optional)</label>
+        <textarea id="notes"></textarea>
+
+        <label>Mode of Payment</label>
+        <div class="payment-box">
+          <input type="radio" id="cod" name="payment" checked disabled>
+          <label for="cod">Cash on Delivery (COD only)</label>
+        </div>
+      </form>
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-box">
+        <h3>Order Summary</h3>
+        <p>Total Items: <span id="total-items">0</span></p>
+        <p>Total Price: ₹<span id="total-price">0</span></p>
+        <p>Promo Code: <span id="promo-info">None</span></p> 
+        <p>Free Shipping 📦</p>
+        <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="order-message" class="hidden">Order placed successfully!</div>
+
+ <script>
+window.onload = function () {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let total = 0;
+
+  cart.forEach(item => {
+    let priceString = item.price.replace(/[^\d]/g, ""); // Remove ₹ and commas
+    total += parseInt(priceString);
+  });
+
+  const promo = localStorage.getItem("promoCode");
+  let finalTotal = total;
+  let promoText = "None";
+
+  if (promo === "YEN08") {
+    finalTotal = Math.floor(total * 0.5);
+    promoText = "YEN08 (50% Off)";
+  }
+
+  document.getElementById("total-items").textContent = cart.length;
+  document.getElementById("total-price").textContent = finalTotal.toLocaleString('en-IN');
+  document.getElementById("promo-info").textContent = promoText;
+};
+
+function placeOrder() {
+  const orderMessage = document.getElementById("order-message");
+  orderMessage.classList.add("show");
+
+  // Show popup
+  const popup = document.getElementById('orderPopup');
+  popup.style.display = 'block';
+
+
+  setTimeout(() => {
+    orderMessage.classList.remove("show");
+    // Clear cart and promo
+    localStorage.removeItem("cart");
+    localStorage.removeItem("promoCode");
+    // Redirect to home
+    window.location.href = "index.html";
+  }, 4000);
+}
+</script>
+<div id="orderPopup" style="
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d4edda;
+  color: #155724;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  display: none;
+  font-size: 18px;
+  z-index: 9999;
+">
+  ✅ Order has been placed successfully!
+</div>
+</body>
+</html>

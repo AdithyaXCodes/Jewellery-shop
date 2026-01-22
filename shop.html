@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta tags for character encoding and responsive layout -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Page title -->
+  <title>Shop - Athena</title>
+  
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Internal styles specific to this page -->
+  <style>
+    /* Reset and base styling */
+    body {
+      background-color: #fff;
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    /* Category grid layout */
+    .category-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      padding: 60px 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* Individual category cards */
+    .category-card {
+      width: 280px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .category-card .image-box {
+      width: 100%;
+      aspect-ratio: 1 / 1; /* Makes square boxes */
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .category-card .image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .category-card:hover .image-box {
+      transform: scale(1.05); /* Zoom effect on hover */
+    }
+
+    .category-card h3 {
+      margin-top: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #222;
+      font-family: cursive;
+    }
+
+    /* Back arrow styling */
+    .svg-back-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: inline-block;
+      padding: 8px;
+      border-radius: 50%;
+      background-color: #f3f3f3;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease;
+    }
+
+    .svg-back-link:hover {
+      background-color: #ddd;
+    }
+
+    .svg-back-link svg {
+      display: block;
+    }
+
+    /* Heading styling */
+    .rainbow-text {
+      font-size: 42px;
+      font-family: cursive;
+      font-weight: bold;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    /* Navigation button styling (if needed) */
+    header nav {
+      padding: 20px 40px;
+    }
+
+    header nav a button {
+      background-color: #d9a7eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    header nav a button:hover {
+      background-color: #c984e2;
+    }
+  </style>
+</head>
+
+<body class="shop-page">
+
+  <!-- Header with back arrow navigation -->
+  <header>
+    <nav>
+      <div style="position: absolute; top: 20px; right: 20px;">
+  <a href="tracking.html" title="Track Your Orders">
+    <img src="https://cdn-icons-png.flaticon.com/512/2933/2933964.png" 
+         alt="Track Orders" 
+         style="width: 35px; height: 35px; cursor: pointer;">
+  </a>
+</div>
+      <a href="index.html" class="svg-back-link" title="Go Back to Home">
+        <!-- Feather-style SVG back arrow -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="#6c63ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Main content -->
+  <main style="display: flex; flex-direction: column; align-items: center; padding-top: 60px;">
+
+    <!-- Page title -->
+    <h2 class="rainbow-text">Shop What You Love</h2>
+
+    <!-- Category cards grid -->
+    <div class="category-grid">
+
+      <!-- Bracelets Category -->
+      <div class="category-card" onclick="location.href='braclet.html'">
+        <div class="image-box">
+          <img src="https://i.pinimg.com/736x/f6/14/4a/f6144a1bdc2f07e5df774a8ddeddf1a0.jpg" alt="Bracelets">
+        </div>
+        <h3>BRACELETS</h3>
+      </div>
+
+      <!-- Rings Category -->
+      <div class="category-card" onclick="location.href='rings.html'">
+        <div class="image-box">
+          <img src="https://i.pinimg.com/736x/ff/ea/f4/ffeaf450bffec79e41ac264db9d4b800.jpg" alt="Rings">
+        </div>
+        <h3>RINGS</h3>
+      </div>
+
+      <!-- Earrings Category -->
+      <div class="category-card" onclick="location.href='earrings.html'">
+        <div class="image-box">
+          <img src="https://i.pinimg.com/736x/7c/7c/30/7c7c3049aa280062ccf8142fd7289286.jpg" alt="Earrings">
+        </div>
+        <h3>EARRINGS</h3>
+      </div>
+
+      <!-- Necklaces Category -->
+      <div class="category-card" onclick="location.href='necklace.html'">
+        <div class="image-box">
+          <img src="https://wwd.com/wp-content/uploads/2022/10/B2C_BRAND_BANNERS-BC3-HOLIDAY-CENTRAL-CROP-KV-5-A3_OF_GL_RGB.jpg?w=1000&h=563&crop=1" alt="Necklaces">
+        </div>
+        <h3>NECKLACES</h3>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer with contact and social links -->
+  <footer style="background: #eed6f7; padding: 20px; text-align: center; font-family: cursive;">
+    <p>Contact us at <a href="mailto:athena@example.com">athena@example.com</a></p>
+    <p>Follow us:
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Pinterest</a>
+    </p>
+    <p>&copy; 2025 Athena Jewelry</p>
+  </footer>
+
+</body>
+</html>
